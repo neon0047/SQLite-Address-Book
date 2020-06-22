@@ -25,6 +25,24 @@ c.execute(
 '''
 
 #create submit function
+
+
+def delete():
+    conn = sqlite3.connect('address_book.db')
+
+    c = conn.cursor()
+
+    c.execute("DELETE FROM people WHERE oid = " + delete_box.get())
+
+    delete_box.delete(0,END)
+
+
+    conn.commit()
+
+    conn.close()
+
+
+
 def submit():
 
     #connect to database
@@ -66,7 +84,7 @@ def query():
     records = c.fetchall()
 
     for record in records:
-        print_records += str(record) + "\n"
+        print_records += str(record[0])+" "+str(record[1] + "\t " + str(record[6])) + "\n"
 
     query_label = Label(root, text = print_records )
     query_label.grid(row= 8, column = 0, columnspan = 2)    
@@ -80,7 +98,7 @@ def query():
 
 
 f_name = Entry(root,width = 30)
-f_name.grid(row=0 , column=1, padx = 20 )
+f_name.grid(row=0 , column=1, padx = 20, pady = (10,0 ) )
 
 l_name = Entry(root,width = 30)
 l_name.grid(row=1 , column=1, padx = 20 )
@@ -97,10 +115,13 @@ state.grid(row=4 , column=1, padx = 20 )
 zipcode = Entry(root,width = 30)
 zipcode.grid(row=5 , column=1, padx = 20 )
 
+delete_box = Entry(root , width = 30)
+delete_box.grid(row = 9 , column= 1, padx = 20)
+
 
 #create text box labels
 f_name_label = Label(root, text="First Name")
-f_name_label.grid(row = 0 , column = 0)
+f_name_label.grid(row = 0 , column = 0, pady = (10,0))
 
 l_name_label = Label(root, text="Last Name")
 l_name_label.grid(row = 1 , column = 0)
@@ -117,6 +138,10 @@ state_label.grid(row = 4 , column = 0)
 zipcode_label = Label(root, text="zipcode")
 zipcode_label.grid(row = 5 , column = 0)
 
+delete_label = Label(root , text = "Delete ID")
+delete_label.grid( row = 9, column = 0)
+
+
 #create submut button
 submit_btn = Button(root, text = 'Add Record to Database', command = submit)
 submit_btn.grid(row= 6, column= 0, columnspan= 2, padx = 10 , pady = 10, ipadx = 100)
@@ -124,6 +149,8 @@ submit_btn.grid(row= 6, column= 0, columnspan= 2, padx = 10 , pady = 10, ipadx =
 query_btn = Button(root, text = 'Show Records', command = query)
 query_btn.grid(row= 7, column= 0, columnspan= 2, padx = 10 , pady = 10, ipadx = 128)
 
+delete_btn = Button(root, text= "Delete Records", command = delete )
+delete_btn.grid(row= 10, column= 0, columnspan= 2, padx = 10 , pady = 10, ipadx = 128)
 #Commit changes
 conn.commit()
 
@@ -132,5 +159,8 @@ conn.commit()
 conn.close()
 
 root.mainloop()
+
+
+
 
 
